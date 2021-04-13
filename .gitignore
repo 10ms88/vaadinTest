@@ -1,0 +1,55 @@
+HELP.md
+target/
+deploy/
+/lib
+.gradle/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.mmdb
+*/lombok.config
+
+# Private Files
+.env
+/src/main/resources/private/
+/src/main/resources/static/**
+/src/main/resources/templates/index.html
+/privates/
+private.properties
+*private.properties
+
+### Project exclude paths ###
+/out/
+
+### Log file ###
+/logs/
+*.log
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
