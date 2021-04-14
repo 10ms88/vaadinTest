@@ -11,6 +11,13 @@ import java.util.List;
 public interface StudentRepo extends JpaRepository<Student, Long> {
     @Query(value =  "select * from Students  " +
             "where " +
-            "   concat(lastName, ' ', patronymic, ' ', firstName) like concat('%', :name, '%')", nativeQuery = true)
-    List<Student> findByName(@Param("name") String name);
+            "   concat(lastName, ' ', patronymic, ' ', firstName) like concat('%', ?1, '%')", nativeQuery = true)
+    List<Student> findByName(String name);
+
+
+
+    @Query(value =  "select * from Students where grp_id = ?1", nativeQuery = true)
+    List<Student> findByGroupId(Long grpId);
+
+
 }

@@ -14,7 +14,7 @@ public class StudentDto {
   private String fullName;
   private LocalDate birthday;
   private String faculty;
-  private Integer groupNumber;
+  private String groupNumber;
 
 
   public static StudentDto of(Student student) {

@@ -1,18 +1,19 @@
 package letscode.crowd.view;
 
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import java.util.ArrayList;
-import java.util.List;
+import com.vaadin.flow.router.RouterLink;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import letscode.crowd.component.GrpEditor;
 import letscode.crowd.domain.Grp;
-import letscode.crowd.domain.dto.StudentDto;
+import letscode.crowd.domain.Student;
 import letscode.crowd.repo.GrpRepo;
 
 @Route("groups")
@@ -22,32 +23,45 @@ public class GrpList extends VerticalLayout {
 
   private final GrpEditor grpEditor;
 
+
   private Grid<Grp> grpGrid = new Grid<>(Grp.class, false);
+  private final Button studentsButton = new Button("Goes to STUDENTS");
+
   private final Button addNewButton = new Button("New group", VaadinIcon.PLUS.create());
-  private final HorizontalLayout toolbar = new HorizontalLayout(addNewButton);
+  private final HorizontalLayout toolbar = new HorizontalLayout(studentsButton, addNewButton);
 
   @Autowired
   public GrpList(GrpRepo grpRepo, GrpEditor grpEditor) {
     this.grpRepo = grpRepo;
     this.grpEditor = grpEditor;
 
-    add(toolbar, grpGrid, grpEditor);
+    add(toolbar,grpEditor, grpGrid );
 
     grpGrid.addColumn("id");
     grpGrid.addColumn("faculty");
     grpGrid.addColumn("groupNumber");
 
+    grpGrid.asSingleSelect().addValueChangeListener(e -> {
+      grpEditor.editGrp(e.getValue());
+    });
+
+    studentsButton.addClickListener(e -> studentsButton.getUI().ifPresent(ui -> ui.navigate("students")));
+
+
+    addNewButton.addClickListener(e -> grpEditor.editGrp(new Grp()));
+
+    grpEditor.setChangeHandler(() -> {
+      grpEditor.setVisible(false);
+      fillList();
+    });
 
     fillList();
   }
 
 
-
   private void fillList() {
-    List<StudentDto> studentDtoList = new ArrayList<>();
-
-      grpGrid.setItems(grpRepo.findAll());
-    }
+    grpGrid.setItems(grpRepo.findAll());
+  }
 
 
 

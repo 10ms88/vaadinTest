@@ -17,5 +17,5 @@ public class Grp {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String faculty;
-  private Integer groupNumber;
+  private String groupNumber;
 }
