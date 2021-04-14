@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import letscode.crowd.domain.Student;
+import letscode.crowd.domain.request.StudentRequest;
 
 @Data
 @Builder
@@ -26,6 +27,4 @@ public class StudentDto {
         .groupNumber(student.getGrp() == null ? null : student.getGrp().getGroupNumber())
         .build();
   }
-
-
 }

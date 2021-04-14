@@ -70,7 +70,7 @@ public class StudentList extends VerticalLayout {
     addNewButton.addClickListener(e -> studentEditor.editStudent(new Student()));
 
     studentEditor.setChangeHandler(() -> {
-      studentEditor.setVisible(false);
+      studentEditor.setVisible(true);
       fillList(filterByName.getValue());
     });
 
