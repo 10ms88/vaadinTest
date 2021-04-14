@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
 
+import letscode.crowd.domain.Grp;
 import letscode.crowd.domain.Student;
 import letscode.crowd.domain.request.StudentRequest;
 
@@ -18,13 +19,13 @@ public class StudentDto {
   private String groupNumber;
 
 
-  public static StudentDto of(Student student) {
+  public static StudentDto of(Student student, Grp grp) {
     return StudentDto.builder()
         .id(student.getId())
         .fullName(student.getFirstName() + " " + student.getPatronymic() + " " + student.getLastName())
         .birthday(student.getBirthday())
-        .faculty(student.getGrp() == null ? null : student.getGrp().getFaculty())
-        .groupNumber(student.getGrp() == null ? null : student.getGrp().getGroupNumber())
+        .faculty(grp.getFaculty())
+        .groupNumber(grp.getGroupNumber())
         .build();
   }
 }

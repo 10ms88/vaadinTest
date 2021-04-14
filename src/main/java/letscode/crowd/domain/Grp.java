@@ -1,16 +1,17 @@
 package letscode.crowd.domain;
 
-import javax.persistence.Column;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "grs")
+@Table(name = "grps")
 public class Grp {
 
   @Id
@@ -18,4 +19,7 @@ public class Grp {
   private Long id;
   private String faculty;
   private String groupNumber;
+
+  @OneToMany(mappedBy = "grpId")
+  private List<Student> studentList;
 }

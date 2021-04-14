@@ -82,11 +82,11 @@ public class StudentList extends VerticalLayout {
 
     if (name.isEmpty()) {
       this.studentRepo.findAll().forEach(student -> {
-        studentDtoList.add(StudentDto.of(student));
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(student.getGrpId()).get()));
       });
     } else {
       this.studentRepo.findByName(name).forEach(student -> {
-        studentDtoList.add(StudentDto.of(student));
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(student.getGrpId()).get()));
       });
     }
     studentGrid.setItems(studentDtoList);
@@ -98,7 +98,7 @@ public class StudentList extends VerticalLayout {
     List<StudentDto> studentDtoList = new ArrayList<>();
 
     grpOptional.ifPresent(grp -> this.studentRepo.findByGroupId(grp.getId()).forEach(student -> {
-      studentDtoList.add(StudentDto.of(student));
+      studentDtoList.add(StudentDto.of(student, grp));
     }));
 
     studentGrid.setItems(studentDtoList);
