@@ -22,8 +22,8 @@ public class StudentDto {
         .id(student.getId())
         .fullName(student.getFirstName() + " " + student.getPatronymic() + " " + student.getLastName())
         .birthday(student.getBirthday())
-        .faculty(student.getGrp().getFaculty())
-        .groupNumber(student.getGrp().getGroupNumber())
+        .faculty(student.getGrp() == null ? null : student.getGrp().getFaculty())
+        .groupNumber(student.getGrp() == null ? null : student.getGrp().getGroupNumber())
         .build();
   }
 

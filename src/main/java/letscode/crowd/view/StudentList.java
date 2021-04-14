@@ -55,14 +55,17 @@ public class StudentList extends VerticalLayout {
 
     add(toolbar, studentEditor, studentGrid);
 
-    studentGrid.addColumn("id");
     studentGrid.addColumn("fullName");
     studentGrid.addColumn("birthday");
     studentGrid.addColumn("faculty");
     studentGrid.addColumn("groupNumber");
 
-//        .asSingleSelect();
-//        .addValueChangeListener(e -> studentEditor.editStudent( StudentDto.of(e.getValue())));
+    studentGrid.asSingleSelect().addValueChangeListener(e ->
+    {
+      if (e.getValue() != null) {
+        studentEditor.editStudent(studentRepo.getOne(e.getValue().getId()));
+      }
+    });
 
     addNewButton.addClickListener(e -> studentEditor.editStudent(new Student()));
 
