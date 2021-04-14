@@ -1,14 +1,11 @@
 package letscode.crowd.domain;
 
 import java.time.LocalDate;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -23,7 +20,5 @@ public class Student {
   private String lastName;
   private String patronymic;
   private LocalDate birthday;
-
-  @ManyToOne(cascade = CascadeType.ALL)
-  private Grp grp;
+  private String grpId;
 }

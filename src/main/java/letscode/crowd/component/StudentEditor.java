@@ -62,6 +62,8 @@ public class StudentEditor extends VerticalLayout {
     delete.getElement().getThemeList().add("error");
 
     save.addClickListener(e -> {
+      System.out.println(student.toString());
+
       if (!validateFields(student)) {
         Notification.show("Fields are filled incorrectly!");
       } else {
