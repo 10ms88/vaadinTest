@@ -1,7 +1,9 @@
 package letscode.crowd.domain;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +22,6 @@ public class Grp {
   private String faculty;
   private String groupNumber;
 
-  @OneToMany(mappedBy = "grpId")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "grpId", cascade = CascadeType.ALL)
   private List<Student> studentList;
 }

@@ -29,11 +29,13 @@ public class StudentEditor extends VerticalLayout {
   private final StudentRepo studentRepo;
   private final GrpRepo grpRepo;
   private Student student;
+
   private final TextField firstName = new TextField("First name");
   private final TextField lastName = new TextField("Last name");
   private final TextField patronymic = new TextField("Patronymic");
+  private final TextField grpId = new TextField("Group ID");
   private final DatePicker birthday = new DatePicker("Birthday");
-  private final TextField grpId = new TextField("GroupId");
+
   private final Button save = new Button("Save");
   private final Button cancel = new Button("Cancel");
   private final Button delete = new Button("Delete");
@@ -62,8 +64,7 @@ public class StudentEditor extends VerticalLayout {
     delete.getElement().getThemeList().add("error");
 
     save.addClickListener(e -> {
-      System.out.println(student.toString());
-      if (!validateFields(student)) {
+      if (!binder.isValid()) {
         Notification.show("Fields are filled incorrectly!");
       } else {
         save();
@@ -103,15 +104,6 @@ public class StudentEditor extends VerticalLayout {
     firstName.focus();
   }
 
-  public List<Long> groupIdList() {
-    List<Long> groupIdList = new ArrayList<>();
-
-    grpRepo.findAll().forEach(grp -> {
-      groupIdList.add(grp.getId());
-    });
-    return groupIdList;
-
-  }
 
   public void validateBinder() {
     binder.forField(firstName)
@@ -137,28 +129,35 @@ public class StudentEditor extends VerticalLayout {
             bDay -> bDay != null && bDay.toEpochDay() <= LocalDate.now().minusYears(15).toEpochDay(),
             "Student must be older then 15 y.o.")
         .bind(Student::getBirthday, Student::setBirthday);
+
+    binder.forField(grpId)
+        .withValidator(
+            this::groupIdCheck, "Group ID incorrect or not exist")
+        .bind(Student::getGrpId, Student::setGrpId);
   }
 
-  public boolean validateFields(Student student) {
-
-    boolean isValid = false;
-    if (student != null) {
-
-      if (student.getLastName() != null || student.getPatronymic() != null || student.getBirthday() != null) {
-        isValid = student.getLastName().length() > 2 ||
-            student.getPatronymic().length() > 2 ||
-            student.getBirthday().toEpochDay() <= LocalDate.now().minusYears(15).toEpochDay();
+  private boolean groupIdCheck(String groupId) {
+    boolean isCorrect = false;
+    if (isLong(groupId)) {
+      if (groupIdList().contains(Long.valueOf(groupId))) {
+        isCorrect = true;
       }
     }
-    return isValid;
+    return isCorrect;
   }
 
   public boolean isLong(String string) {
     Pattern pattern = Pattern.compile("^[0-9]+$");
     Matcher matcher = pattern.matcher(string);
-    System.out.println(matcher.matches());
     return matcher.matches();
   }
 
+  public List<Long> groupIdList() {
+    List<Long> groupIdList = new ArrayList<>();
+    grpRepo.findAll().forEach(grp -> {
+      groupIdList.add(grp.getId());
+    });
+    return groupIdList;
+  }
 
 }

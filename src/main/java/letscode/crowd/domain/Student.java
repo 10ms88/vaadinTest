@@ -20,5 +20,5 @@ public class Student {
   private String lastName;
   private String patronymic;
   private LocalDate birthday;
-  private Long grpId;
+  private String grpId;
 }

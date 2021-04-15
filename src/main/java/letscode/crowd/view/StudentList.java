@@ -10,11 +10,9 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import letscode.crowd.component.StudentEditor;
-import letscode.crowd.domain.Grp;
 import letscode.crowd.domain.Student;
 import letscode.crowd.domain.dto.StudentDto;
 import letscode.crowd.repo.GrpRepo;
@@ -51,7 +49,7 @@ public class StudentList extends VerticalLayout {
 
     filterByGroupNumber.setPlaceholder("Filter by group number");
     filterByGroupNumber.setValueChangeMode(ValueChangeMode.EAGER);
-    filterByGroupNumber.addValueChangeListener(field -> fillList(field.getValue()));
+    filterByGroupNumber.addValueChangeListener(field -> fillListByGroupNumber(field.getValue()));
 
     add(toolbar, studentEditor, studentGrid);
 
@@ -82,25 +80,27 @@ public class StudentList extends VerticalLayout {
 
     if (name.isEmpty()) {
       this.studentRepo.findAll().forEach(student -> {
-        studentDtoList.add(StudentDto.of(student, grpRepo.findById(student.getGrpId()).get()));
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(Long.valueOf(student.getGrpId())).get()));
       });
     } else {
       this.studentRepo.findByName(name).forEach(student -> {
-        studentDtoList.add(StudentDto.of(student, grpRepo.findById(student.getGrpId()).get()));
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(Long.valueOf(student.getGrpId())).get()));
       });
     }
     studentGrid.setItems(studentDtoList);
   }
 
-  private void fillListByGroupNumber(String faculty) {
-
-    Optional<Grp> grpOptional = grpRepo.findByFaculty(faculty);
+  private void fillListByGroupNumber(String groupNumber) {
     List<StudentDto> studentDtoList = new ArrayList<>();
-
-    grpOptional.ifPresent(grp -> this.studentRepo.findByGroupId(grp.getId()).forEach(student -> {
-      studentDtoList.add(StudentDto.of(student, grp));
-    }));
-
+    if (groupNumber.isEmpty()) {
+      this.studentRepo.findAll().forEach(student -> {
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(Long.valueOf(student.getGrpId())).get()));
+      });
+    } else {
+      this.studentRepo.findByGroupNumber(groupNumber).forEach(student -> {
+        studentDtoList.add(StudentDto.of(student, grpRepo.findById(Long.valueOf(student.getGrpId())).get()));
+      });
+    }
     studentGrid.setItems(studentDtoList);
   }
 
