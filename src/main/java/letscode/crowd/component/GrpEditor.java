@@ -8,6 +8,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,7 +61,7 @@ public class GrpEditor extends VerticalLayout {
 
     delete.addClickListener(e ->
     {
-      if (grp.getStudentList().size() == 0) {
+      if (!deleteCheck(grp)) {
         delete();
       } else {
         Notification.show("NOT ALLOW! The group contains students!");
@@ -96,6 +98,14 @@ public class GrpEditor extends VerticalLayout {
     binder.setBean(this.grp);
     setVisible(true);
     faculty.focus();
+  }
+
+  public boolean deleteCheck(Grp grp) {
+    List<Long> groupIdList = grpRepo.findNotDeletedGroups()
+        .stream()
+        .map(Grp::getId)
+        .collect(Collectors.toList());
+    return groupIdList.contains(grp.getId());
   }
 
 }

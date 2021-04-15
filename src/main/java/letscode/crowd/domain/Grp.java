@@ -22,6 +22,6 @@ public class Grp {
   private String faculty;
   private String groupNumber;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "grpId", cascade = CascadeType.ALL)
-  private List<Student> studentList;
+//  @OneToMany(fetch = FetchType.EAGER, mappedBy = "grpId", cascade = CascadeType.ALL)
+//  private List<Student> studentList;
 }
