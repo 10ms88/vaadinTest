@@ -1,44 +1,42 @@
 package letscode.crowd.component;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import letscode.crowd.domain.Grp;
-import letscode.crowd.domain.Student;
 import letscode.crowd.repo.GrpRepo;
 
 @SpringComponent
 @UIScope
-public class GrpEditor extends VerticalLayout implements KeyNotifier {
-  private final GrpRepo grpRepo;
+public class GrpEditor extends VerticalLayout {
 
+  private final GrpRepo grpRepo;
   private Grp grp;
 
   private TextField faculty = new TextField("Faculty");
-  private TextField groupNumber = new TextField("GroupNumber");
-
+  private TextField groupNumber = new TextField("Group number");
   private Button save = new Button("Save");
+  private Button delete = new Button("Delete");
   private Button cancel = new Button("Cancel");
 
-  private HorizontalLayout buttons = new HorizontalLayout(save, cancel);
-
+  private HorizontalLayout buttons = new HorizontalLayout(save, cancel, delete);
   private Binder<Grp> binder = new Binder<>(Grp.class);
-
 
   @Setter
   private ChangeHandler changeHandler;
 
   public interface ChangeHandler {
+
     void onChange();
   }
 
@@ -49,18 +47,24 @@ public class GrpEditor extends VerticalLayout implements KeyNotifier {
 
     add(faculty, groupNumber, buttons);
 
-//    binder.forField(groupNumber).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-//        .bind("groupNumber");
-
     binder.bindInstanceFields(this);
 
     setSpacing(true);
 
     save.getElement().getThemeList().add("primary");
-
-    addKeyPressListener(Key.ENTER, e -> save());
+    delete.getElement().getThemeList().add("error");
 
     save.addClickListener(e -> save());
+
+    delete.addClickListener(e ->
+    {
+      if (!deleteCheck(grp)) {
+        delete();
+      } else {
+        Notification.show("NOT ALLOW! The group contains students!");
+      }
+    });
+
     cancel.addClickListener(e -> setVisible(false));
     setVisible(false);
   }
@@ -68,6 +72,11 @@ public class GrpEditor extends VerticalLayout implements KeyNotifier {
 
   private void save() {
     grpRepo.save(grp);
+    changeHandler.onChange();
+  }
+
+  private void delete() {
+    grpRepo.delete(grp);
     changeHandler.onChange();
   }
 
@@ -88,4 +97,11 @@ public class GrpEditor extends VerticalLayout implements KeyNotifier {
     faculty.focus();
   }
 
+  public boolean deleteCheck(Grp grp) {
+    List<Long> groupIdList = grpRepo.findNotDeletedGroups()
+        .stream()
+        .map(Grp::getId)
+        .collect(Collectors.toList());
+    return groupIdList.contains(grp.getId());
+  }
 }

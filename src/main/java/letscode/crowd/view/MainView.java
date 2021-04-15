@@ -27,7 +27,7 @@ public class MainView extends VerticalLayout {
 
 
   private Component[] createMenuItems() {
-    return new Tab[]{createTab("STUDENTS", StudentList.class), createTab("GROUPS", GrpList.class)};
+    return new Tab[] {createTab("STUDENTS", StudentList.class), createTab("GROUPS", GrpList.class)};
   }
 
   private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
