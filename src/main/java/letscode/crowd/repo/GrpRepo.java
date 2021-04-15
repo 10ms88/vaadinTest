@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import letscode.crowd.domain.Grp;
-import letscode.crowd.domain.Student;
 
 public interface GrpRepo extends JpaRepository<Grp, Long> {
 

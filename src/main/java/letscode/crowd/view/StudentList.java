@@ -23,16 +23,12 @@ public class StudentList extends VerticalLayout {
 
   private final StudentRepo studentRepo;
   private final GrpRepo grpRepo;
-
   private final StudentEditor studentEditor;
-
   private Grid<StudentDto> studentGrid = new Grid<>(StudentDto.class, false);
   private final TextField filterByName = new TextField();
   private final TextField filterByGroupNumber = new TextField();
-
   private final Button addNewButton = new Button("New student", VaadinIcon.PLUS.create());
   private final Button grpButton = new Button("Goes to GROUPS");
-
   private final HorizontalLayout toolbar = new HorizontalLayout(grpButton, filterByName, filterByGroupNumber, addNewButton);
 
   @Autowired

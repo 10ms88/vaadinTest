@@ -21,7 +21,6 @@ import letscode.crowd.repo.GrpRepo;
 public class GrpEditor extends VerticalLayout {
 
   private final GrpRepo grpRepo;
-
   private Grp grp;
 
   private TextField faculty = new TextField("Faculty");
@@ -31,9 +30,7 @@ public class GrpEditor extends VerticalLayout {
   private Button cancel = new Button("Cancel");
 
   private HorizontalLayout buttons = new HorizontalLayout(save, cancel, delete);
-
   private Binder<Grp> binder = new Binder<>(Grp.class);
-
 
   @Setter
   private ChangeHandler changeHandler;
@@ -107,5 +104,4 @@ public class GrpEditor extends VerticalLayout {
         .collect(Collectors.toList());
     return groupIdList.contains(grp.getId());
   }
-
 }
